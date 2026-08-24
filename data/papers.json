@@ -356,7 +356,6 @@
     "code_url": "",
     "core_idea_zh": "以 Wan2.1 的视频原生 3D causal VAE/VideoDiT 为生成先验，并用类似 DCVC-RT 的上下文 codec 压缩 latent；序列级 flow-matching refinement 统一恢复整段视频，重点克服逐帧图像先验和 GLC-Video 类递归 latent 编码产生的结构幻觉与时间闪烁。",
     "training": {"datasets": "Vimeo-90K", "crop_or_resolution": "5 帧阶段为 256×256；长序列阶段短边缩放到 512 后随机裁剪 256×256", "optimizer": "NR（未报告）", "learning_rate": "阶段 I 1e-4；阶段 II 5e-5 逐步降至 1e-5", "batch_size": "阶段 I 8；阶段 II 2", "schedule": "5 帧 40k iter；9 帧 30k；13 帧 30k；多码率/生成细化再训练 100k", "hardware": "2×NVIDIA A800", "pretrained_models": "Wan2.1 视频扩散模型；上下文 codec 参考 DCVC-RT；adapter 参考 VACE", "notes": "阶段 I λr=0.5；阶段 II λr∈{0.05,0.1,0.25,0.5}；tN=0.7，flow refinement 5 步。模型约 2.3B 参数。"},
-    "temporal_analysis": "上下文 codec 仍存在前向参考依赖，但生成细化在序列级联合建模，不是逐帧独立补纹理；因此主要缓解感知闪烁和局部结构漂移，不能等同于完全消除递归参考误差。",
     "evaluation": "HEVC Class B、UVG、MCL-JCV；LPIPS/DISTS/FID、失真、时间一致性与复杂度",
     "audit": {"status": "verified", "source": "CVPR 2026 正式论文、补充材料与 arXiv v2", "checked": "2026-08-23"}
   },
@@ -372,7 +371,6 @@
     "code_url": "",
     "core_idea_zh": "将解码改写为由关键帧和逐帧视觉条件共同驱动的首尾帧到视频生成；颜色距离引导的关键帧选择适应外观变化，在真实性之外显式加强结构和颜色忠实度，直接回应生成式视频压缩的幻觉问题。",
     "training": {"datasets": "待预印本附录核验", "crop_or_resolution": "待全文核验", "optimizer": "待全文核验", "learning_rate": "待全文核验", "batch_size": "待全文核验", "schedule": "待全文核验", "hardware": "NR（未报告）", "pretrained_models": "预训练首尾帧条件视频生成模型", "notes": "预印本；正式发表状态持续跟踪。"},
-    "temporal_analysis": "双端关键帧和逐帧视觉条件减少长 GOP 单向漂移；错误不会只由上一 P 帧单一路径传递，但关键帧选择失误和生成模型幻觉仍可能造成区段级偏差。",
     "evaluation": "通用视频基准；感知、失真、颜色与时间一致性",
     "audit": {"status": "partial", "source": "arXiv v1", "checked": "2026-08-23"}
   },
@@ -387,8 +385,7 @@
     "paper_url": "https://arxiv.org/abs/2107.12038",
     "code_url": "",
     "core_idea_zh": "在学习式视频 codec 中通过对抗训练合成低码率下未显式传输的高频细节，并把已生成的细节作为后续帧的时序上下文传播；这是后续生成式 P 帧编码讨论‘生成细节能否稳定复用’的重要早期基线。",
-    "training": {"datasets": "Vimeo-90K 等（配置需按正式附录继续细化）", "crop_or_resolution": "待附录逐项核验", "optimizer": "待附录逐项核验", "learning_rate": "待附录逐项核验", "batch_size": "待附录逐项核验", "schedule": "待附录逐项核验", "hardware": "NR（未报告）", "pretrained_models": "学习式视频压缩基线", "notes": "本轮补入 GenVC 相关工作引用链；训练表仍为 partial。"},
-    "temporal_analysis": "生成细节被显式传播到后续帧，能增强纹理一致性，也会把不真实细节带入未来参考；误差传播本身是方法收益与风险的同一来源。",
+    "training": {"datasets": "Vimeo-90K 等（配置需按正式附录继续细化）", "crop_or_resolution": "待附录逐项核验", "optimizer": "待附录逐项核验", "learning_rate": "待附录逐项核验", "batch_size": "待附录逐项核验", "schedule": "待附录逐项核验", "hardware": "NR（未报告）", "pretrained_models": "学习式视频压缩基线", "notes": "训练表仍为 partial。"},
     "evaluation": "UVG、HEVC 等；感知质量、率失真与主观比较",
     "audit": {"status": "partial", "source": "ECCV 2022 正式论文/arXiv", "checked": "2026-08-23"}
   },
@@ -404,7 +401,6 @@
     "code_url": "",
     "core_idea_zh": "S2VC 将条件视频 codec 与一步扩散解码器结合，用从重建上下文提取的语义引导替代文本提示，并用时间一致性引导约束生成细节；目标是在保持超低码率感知质量的同时，把多步扩散压缩为单次前向。",
     "training": {"datasets": "训练数据集名称待正式补充材料进一步核验", "crop_or_resolution": "随机采样 512×512、512×768、768×1024、1024×1024", "optimizer": "AdamW", "learning_rate": "前 20k iter 从 1e-4 降到 5e-6；后 10k 为 1e-6", "batch_size": "总 batch 16", "schedule": "前 20k iter 序列长度从 2 增至 32；再以 32 帧训练 10k iter", "hardware": "4×NVIDIA A100 80GB，约 14 天", "pretrained_models": "预训练扩散/生成 backbone + 条件视频 codec", "notes": "损失权重 α=0.001、β=0.25。"},
-    "temporal_analysis": "语义与时间引导减少逐帧随机纹理变化，但条件仍来自历史重建，上游结构误差可能进入后续条件；论文主要改善生成一致性，并未证明递归误差被理论消除。",
     "evaluation": "HEVC Class B、UVG、MCL-JCV；LPIPS/DISTS/FID/KID 与速度",
     "audit": {"status": "partial", "source": "CVPR 2026 正式论文与补充材料", "checked": "2026-08-23"}
   },
@@ -420,7 +416,6 @@
     "code_url": "https://github.com/NJUVISION/YODA",
     "core_idea_zh": "YODA 用可训练 Temporal-Aware AutoEncoder 从历史重建提取多尺度参考特征，Conditional Latent Coder 负责条件熵编码，再由轻量 linear DiT 一步去噪。它把时序表示学习、码流和感知生成统一端到端优化，直接面向多步扩散过慢与 P 帧误差传播。",
     "training": {"datasets": "Vimeo-90K septuplet", "crop_or_resolution": "7 帧、256×256 random crop", "optimizer": "NR（论文/公开推理代码未披露）", "learning_rate": "阶段 II 从 1e-4 降至 5e-6；阶段 III 固定 5e-6", "batch_size": "NR（未报告）", "schedule": "三阶段；阶段 II 序列长度由 2 帧渐增至 7 帧；阶段 III 全局端到端 + GAN", "hardware": "NR（训练卡未报告；RTX 5090 仅为推理速度测试）", "pretrained_models": "NR；公开仓库仅含推理与码流代码", "notes": "四个独立码率模型 λrate∈{1,2,4,8}；阶段 I λ1=λ2=λ3=1、对抗权重 0.1。"},
-    "temporal_analysis": "IPPP 前向预测，参考特征来自上一重建，故错误仍可递归累积；TA-AE 的多尺度参考和逐步加长训练用于提升鲁棒性，一步 DiT 主要避免采样噪声和延迟，并不切断参考链。",
     "evaluation": "UVG、MCL-JCV、HEVC Class B 前 96 帧（1080p/BT.709）；LPIPS/DISTS/FID/KID",
     "audit": {"status": "verified", "source": "IEEE TCSVT Early Access、arXiv 正文与官方代码", "checked": "2026-08-23"}
   },
@@ -436,7 +431,6 @@
     "code_url": "",
     "core_idea_zh": "从无噪声的重建 latent 直接执行一步扩散，借助 temporal context adapter 注入参考信息，并端到端联合微调 codec 与 Stable Diffusion 解码路径；用一步生成替代多步去噪以显著降低感知视频压缩延迟。",
     "training": {"datasets": "Vimeo-90K", "crop_or_resolution": "待附录核验", "optimizer": "NR（未报告）", "learning_rate": "主要阶段 3e-4；在第 3/5/7 epoch 降到 1e-4/5e-5/1e-5", "batch_size": "30（已定位阶段）", "schedule": "已定位阶段训练 7 epoch；其余蒸馏/端到端阶段见论文附录", "hardware": "NR（训练卡未报告）", "pretrained_models": "Stable Diffusion v2.1", "notes": "四个码率权重 λ∈{16,48,128,384}；部分阶段配置仍待核验。"},
-    "temporal_analysis": "temporal adapter 利用参考上下文缓解帧间闪烁，但递归条件仍会携带上一帧重建偏差；一步确定性路径减少多步采样差异，不等同于抑制长期结构漂移。",
     "evaluation": "UVG、HEVC Class B、MCL-JCV；LPIPS/DISTS/FID/KID 与复杂度",
     "audit": {"status": "partial", "source": "arXiv 正文/HTML", "checked": "2026-08-23"}
   },
@@ -452,7 +446,6 @@
     "code_url": "",
     "core_idea_zh": "通过模块替换和剪枝减小扩散网络，引入零额外计算的 Online Temporal Shift 与隐式一致性损失抑制闪烁，再以异步 latent 解码、batch 维并行和混合半精度实现实时生成式视频编码。",
     "training": {"datasets": "Vimeo-90K（完整训练划分与长序列策略待附录核验）", "crop_or_resolution": "待全文核验", "optimizer": "待全文核验", "learning_rate": "待全文核验", "batch_size": "待全文核验", "schedule": "待全文核验", "hardware": "NR（H800 为推理速度测试，不误记为训练卡）", "pretrained_models": "扩散式感知视频 codec", "notes": "720p 在 H800 报告编码/解码 206/30 fps；属于推理指标。"},
-    "temporal_analysis": "显式 Online Temporal Shift 在相邻重建特征间传递信息，隐式损失约束生成一致性；可减轻高频闪烁，但仍依赖历史重建，长 GOP 累积结构误差尚需独立测量。",
     "evaluation": "HEVC 等；LPIPS/DISTS、时间一致性和实时吞吐",
     "audit": {"status": "partial", "source": "arXiv v1", "checked": "2026-08-23"}
   },
@@ -468,7 +461,6 @@
     "code_url": "",
     "core_idea_zh": "GLVC 在连续生成 tokenizer 的 latent 空间统一 I/P 帧编码，重新设计轻量 latent codec，并用递归记忆聚合长期信息；相较 GLC-Video 的离散 token 残差，它更强调连续生成表示与长时参考的联合压缩。",
     "training": {"datasets": "Vimeo 系列训练数据（精确版本待附录核验）", "crop_or_resolution": "待全文核验", "optimizer": "待全文核验", "learning_rate": "待全文核验", "batch_size": "待全文核验", "schedule": "待全文核验", "hardware": "NR（A100 上速度为推理测量）", "pretrained_models": "连续生成 tokenizer", "notes": "当前保留预印本状态，待正式录用页面确认。"},
-    "temporal_analysis": "递归记忆扩大时间感受野并稳定纹理，但记忆也可能长期保留错误 latent；应单独测量 GOP 内随帧号变化的 LPIPS/漂移，而不能只看平均 BD-rate。",
     "evaluation": "UVG、HEVC Class B、MCL-JCV；LPIPS/DISTS/FID 与复杂度",
     "audit": {"status": "partial", "source": "arXiv/OpenReview", "checked": "2026-08-23"}
   },
@@ -484,7 +476,6 @@
     "code_url": "https://github.com/semcomm/GVC-RT",
     "core_idea_zh": "基于预训练 LFQ tokenizer 采用非对称 codec：训练时用生成空间对齐正则让轻量编码路径匹配 LFQ latent，推理时移除重 tokenizer/对齐分支，再以轻量 detokenizer 消除解码瓶颈，实现超低码率实时生成 latent 编码。",
     "training": {"datasets": "Vimeo-90K 预训练；扩展 29 帧 Vimeo 序列微调", "crop_or_resolution": "待正式论文附录逐项核验", "optimizer": "待附录核验", "learning_rate": "待附录核验", "batch_size": "待附录核验", "schedule": "短序列预训练 + 29 帧长序列微调", "hardware": "NR（训练卡未报告）", "pretrained_models": "预训练 lookup-free quantization tokenizer", "notes": "1080p 123.1/55.1 fps 为推理编码/解码速度。"},
-    "temporal_analysis": "长序列微调有助于适应递归 P 帧状态；但其核心贡献是移除推理瓶颈，LFQ latent 或参考状态中的错误仍可能传播，需结合逐帧曲线评估。",
     "evaluation": "1080p 标准视频集；DISTS/LPIPS BD-rate 与吞吐",
     "audit": {"status": "partial", "source": "ACM MM 2026 元数据、arXiv 与官方代码", "checked": "2026-08-23"}
   },
@@ -500,7 +491,6 @@
     "code_url": "",
     "core_idea_zh": "论文提出 GenVC：不移植文生视频大模型，而是与 DCVC-UF 条件 codec 联合从零训练面向压缩的像素空间视频扩散模型；global-to-local 层级恢复局部时空细节，再用 DMD 蒸馏为一步。作者发现普通 DMD 会形成‘教师错误引导—学生运动停滞’反馈环，ASD 按更新方向与真实视频方向的余弦一致性门控梯度，并用像素、LPIPS、RAFT 光流损失锚定源视频。",
     "training": {"datasets": "OpenVid", "crop_or_resolution": "512×512 random crop；每样本 96 帧（3 个 GOP）", "optimizer": "AdamW", "learning_rate": "NR（论文未在已核验实现段给出）", "batch_size": "NR（未报告）", "schedule": "阶段 1 多步教师 12 epoch；阶段 2 一步学生+codec 3 epoch；阶段 3 冻结 codec 做 ASD 1 epoch", "hardware": "4×NVIDIA A100 80GB", "pretrained_models": "仅用预训练 DCVC-UF 初始化 codec；478M 扩散模型从零训练；RAFT 用于训练损失", "notes": "GOP=32；教师 λR∈{0.56,0.80,1.12,1.76,2.40}；学生 λR∈{10.24,5.12,2.56,1.28,0.64,0.32}；ASD λaux=.01, λL=1, λF=2, λD=8, τ=.015, κ=.02, nfake=4。"},
-    "temporal_analysis": "最直接处理的是一步蒸馏中的运动停滞，而非传统 P 帧误差累积：ASD 阻断错误教师梯度的正反馈，RAFT 光流锚定运动。底层 DCVC-UF 条件仍含历史依赖，长 GOP 参考误差需要与蒸馏漂移分开审计。",
     "evaluation": "UVG、MCL-JCV、HEVC Class B 前 96 帧/1080p；LPIPS/DISTS/FID、光流与速度",
     "audit": {"status": "verified", "source": "arXiv v1 正文、实现细节与作者 PDF", "checked": "2026-08-23"}
   },
@@ -516,7 +506,6 @@
     "code_url": "",
     "core_idea_zh": "把预训练视频生成模型的 rectified-flow ODE 在推理时等价改写为 SDE，并对每步随机注入噪声做共享码本选择，使码流直接指定生成轨迹；I2V、T2V、首尾帧到视频三种条件模式覆盖忠实度、时间一致性与码率的不同取舍。",
     "training": {"datasets": "无压缩训练（zero-shot）", "crop_or_resolution": "无离线训练", "optimizer": "不适用", "learning_rate": "不适用", "batch_size": "不适用", "schedule": "不适用；编码时进行轨迹/codebook 选择", "hardware": "NR（推理硬件见论文）", "pretrained_models": "预训练 rectified-flow 视频生成模型", "notes": "报告低于 0.002 bpp；基础生成模型训练配置不归入 codec 训练。"},
-    "temporal_analysis": "首尾双锚点和 GOP 边界共享比单向 P 帧更能限制区段漂移；T2V 模式侧信息近零但真实性风险最高，不能用平均感知分数替代运动/身份保持审计。",
     "evaluation": "标准视频基准；超低码率感知质量、时间一致性与可控码率",
     "audit": {"status": "verified", "source": "arXiv v1", "checked": "2026-08-23"}
   }
