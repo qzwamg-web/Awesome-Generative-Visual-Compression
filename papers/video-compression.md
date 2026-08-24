@@ -31,16 +31,4 @@
 | 2026 | ◐ | [Controllable Generative Video Compression](https://arxiv.org/abs/2604.06655) | 可控视频生成 | 关键帧与逐帧条件共同约束生成，强化结构、颜色和运动忠实度。 |
 | 2026 | ✅ | [GenVC / Adaptive Score Distillation](https://arxiv.org/abs/2607.22772) | 压缩原生像素扩散 | 从零训练压缩专用视频扩散，并门控会导致运动停滞的错误 DMD 更新。 |
 
-## P 帧误差传播对照
-
-| 工作 | 参考结构 | 误差传播风险 | 主要缓解机制 |
-|---|---|---|---|
-| GLC-Video | 递归 latent 残差 | token/结构错误进入后续参考 | 时空类别超先验、code prediction |
-| GLVC / GVC-RT | I/P latent + 递归记忆 | 错误 latent 被长期记忆 | 连续/LFQ tokenizer、长序列微调 |
-| YODA | IPPP，多尺度历史重建 | 上一帧结构偏差逐帧累积 | TA-AE、渐增长序列训练、一步 DiT |
-| S2VC / DiffVC-OSD/RT | 条件 codec + 生成细化 | 历史条件偏差与生成闪烁叠加 | 时间引导、adapter、Temporal Shift/一致性损失 |
-| GNVC-VD | 上下文 codec + 序列级 VideoDiT | codec 仍递归，但生成不再逐帧独立 | 整段 flow matching refinement |
-| GenVC | DCVC-UF 条件 + 32 帧 GOP | 参考误差与一步蒸馏漂移是两类问题 | ASD 梯度门控 + L1/LPIPS/RAFT 光流锚定 |
-| 双锚点/zero-shot GVC | GOP 首尾锚点 | 区段级身份/运动幻觉 | 双边界条件与 GOP 边界共享 |
-
-逐篇训练配置、核验证据和更完整的误差分析见 [`data/papers.json`](../data/papers.json) 与 [2026 新工作审计](../docs/latest-video-audit-2026.md)。
+逐篇训练配置与核验证据见 [`data/papers.json`](../data/papers.json)。
