@@ -10,7 +10,6 @@
 - 方法必须显式利用 GAN、扩散/流模型、生成式 tokenizer、预训练生成先验或隐式神经表示来改善重建真实性、感知质量或极低码率表现。
 - 正式会议/期刊论文进入主表；高度相关但尚未正式发表的论文进入 Preprint 表。
 - 训练信息仅来自论文正文、补充材料或官方代码。未披露字段统一写作 `NR（未报告）`，不做推断。
-- “近十年工作”按可复现检索协议持续维护，详见 [检索与审计协议](docs/scope-and-protocol.md)。
 
 ## 状态说明
 
@@ -24,10 +23,7 @@
 
 - [生成式图像编码论文](papers/image-compression.md)
 - [生成式视频编码论文](papers/video-compression.md)
-- [2026 新工作与引用链审计](docs/latest-video-audit-2026.md)
 - [结构化论文数据](data/papers.json)
-- [检索与审计协议](docs/scope-and-protocol.md)
-- [贡献指南](CONTRIBUTING.md)
 
 ## 代表性路线
 
@@ -41,11 +37,11 @@
 
 ## 数据字段
 
-每篇论文至少包含：`title`、`year`、`venue`、`publication_status`、`task`、`family`、`paper_url`、`code_url`、`core_idea_zh`、`training`、`evaluation`、`audit`。视频论文额外记录 `temporal_analysis`，明确参考结构、P 帧/latent 递归路径、误差累积风险与缓解机制。`training` 内固定包含数据集、输入尺寸、优化器、学习率、batch size、训练步数/epoch、硬件、预训练模型和补充说明。
+每篇论文至少包含：`title`、`year`、`venue`、`publication_status`、`task`、`family`、`paper_url`、`code_url`、`core_idea_zh`、`training`、`evaluation`、`audit`。`training` 内固定包含数据集、输入尺寸、优化器、学习率、batch size、训练步数/epoch、硬件、预训练模型和补充说明。
 
 ## 当前覆盖
 
-当前索引覆盖 2016–2026，并建立 2025–2026 高相关预印本观察表。本轮已补入 GenVC/ASD、YODA、S2VC、GNVC-VD、DiffVC-OSD、DiffVC-RT、GLVC、GVC-RT 等近期主线。仓库采用“可检索范围 + 逐篇证据审计”的方式迭代；不把检索结果数量包装成绝对完备性结论。
+当前索引覆盖 2016–2026，并建立 2025–2026 高相关预印本观察表，包含 GenVC/ASD、YODA、S2VC、GNVC-VD、DiffVC-OSD、DiffVC-RT、GLVC、GVC-RT 等近期主线。
 
 ## Citation
 
