@@ -1,0 +1,127 @@
+[
+  {
+    "id": "kawar2022ddrm", "title": "Denoising Diffusion Restoration Models", "year": 2022, "venue": "NeurIPS 2022", "publication_status": "peer_reviewed", "task": "image_restoration", "subtask": "linear inverse problems", "family": "training-free diffusion posterior", "paper_url": "https://arxiv.org/abs/2201.11793", "code_url": "https://github.com/bahjat-kawar/ddrm",
+    "core_idea_zh": "将线性退化算子做 SVD，在谱空间中把扩散反演分成受观测约束和由生成先验补全的分量，以同一个预训练 DDPM 处理超分、去模糊、修补与着色。",
+    "training": {"datasets": "无任务训练；使用 ImageNet/FFHQ 预训练扩散模型", "crop_or_resolution": "依基础模型，常用 256×256", "optimizer": "不适用", "learning_rate": "不适用", "batch_size": "不适用", "schedule": "不适用", "hardware": "不适用", "pretrained_models": "ImageNet/FFHQ unconditional DDPM", "notes": "基础生成模型预训练成本不计为 restoration 适配训练。"}, "evaluation": "ImageNet/FFHQ；超分、去模糊、修补、着色；PSNR/KID/FID", "audit": {"status": "verified", "source": "NeurIPS 2022 论文与官方代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "lugmayr2022repaint", "title": "RePaint: Inpainting using Denoising Diffusion Probabilistic Models", "year": 2022, "venue": "CVPR 2022", "publication_status": "peer_reviewed", "task": "image_restoration", "subtask": "inpainting", "family": "training-free resampling diffusion", "paper_url": "https://arxiv.org/abs/2201.09865", "code_url": "https://github.com/andreas128/RePaint",
+    "core_idea_zh": "在每个反向扩散步把已知区域重新采样为与观测一致的噪声状态，并通过 forward/backward resampling 改善已知区与生成区的协调。",
+    "training": {"datasets": "无修补训练；使用 ImageNet、CelebA-HQ、Places2 预训练 DDPM", "crop_or_resolution": "依基础模型", "optimizer": "不适用", "learning_rate": "不适用", "batch_size": "不适用", "schedule": "推理期重采样", "hardware": "不适用", "pretrained_models": "unconditional DDPM", "notes": "mask 只在推理阶段使用。"}, "evaluation": "ImageNet、CelebA-HQ；多类规则与自由形状掩膜；LPIPS/用户研究", "audit": {"status": "verified", "source": "CVPR 2022 论文与官方代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "zhou2022codeformer", "title": "Towards Robust Blind Face Restoration with Codebook Lookup Transformer", "year": 2022, "venue": "NeurIPS 2022", "publication_status": "peer_reviewed", "task": "image_restoration", "subtask": "blind face restoration", "family": "VQ codebook + Transformer", "paper_url": "https://arxiv.org/abs/2206.11253", "code_url": "https://github.com/sczhou/CodeFormer",
+    "core_idea_zh": "先学习离散高质量人脸码本，再由 Transformer 从退化输入预测 code token；可调 fidelity weight 控制使用生成先验还是保留输入身份。",
+    "training": {"datasets": "FFHQ 70k", "crop_or_resolution": "512×512", "optimizer": "Adam", "learning_rate": "分阶段配置见官方 YAML", "batch_size": "NR（论文未统一报告）", "schedule": "VQ autoencoder、code prediction、联合微调三阶段", "hardware": "NR（未报告）", "pretrained_models": "自训练 VQ codebook", "notes": "退化采用 blur/downsample/noise/JPEG 合成。"}, "evaluation": "LFW-Test、WebPhoto-Test、WIDER-Test；FID、NIQE、identity", "audit": {"status": "partial", "source": "NeurIPS 2022 论文与官方代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "wang2023ddnm", "title": "Zero-Shot Image Restoration Using Denoising Diffusion Null-Space Model", "year": 2023, "venue": "ICLR 2023", "publication_status": "peer_reviewed", "task": "image_restoration", "subtask": "linear inverse problems", "family": "zero-shot null-space diffusion", "paper_url": "https://arxiv.org/abs/2212.00490", "code_url": "https://github.com/wyhuai/DDNM",
+    "core_idea_zh": "把恢复结果投影为满足测量的量程空间分量与不影响测量的零空间分量，扩散先验只负责后者，从而在不微调模型的情况下保持严格数据一致性。",
+    "training": {"datasets": "无任务训练", "crop_or_resolution": "依预训练模型", "optimizer": "不适用", "learning_rate": "不适用", "batch_size": "不适用", "schedule": "zero-shot sampling", "hardware": "不适用", "pretrained_models": "ImageNet/FFHQ diffusion models", "notes": "DDNM+ 扩展到有噪测量。"}, "evaluation": "ImageNet、CelebA；超分、修补、去模糊、着色、压缩感知", "audit": {"status": "verified", "source": "ICLR 2023 论文与官方代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "chung2023dps", "title": "Diffusion Posterior Sampling for General Noisy Inverse Problems", "year": 2023, "venue": "ICLR 2023", "publication_status": "peer_reviewed", "task": "image_restoration", "subtask": "general inverse problems", "family": "posterior score sampling", "paper_url": "https://arxiv.org/abs/2209.14687", "code_url": "https://github.com/DPS2022/diffusion-posterior-sampling",
+    "core_idea_zh": "在每个反向扩散步把预训练 score 与测量似然梯度相加，近似未知图像的后验 score，因而可处理有噪、线性和非线性观测。",
+    "training": {"datasets": "无任务训练", "crop_or_resolution": "依预训练 score model", "optimizer": "不适用", "learning_rate": "不适用", "batch_size": "不适用", "schedule": "posterior sampling", "hardware": "不适用", "pretrained_models": "FFHQ/ImageNet score models", "notes": "似然权重为推理超参数。"}, "evaluation": "FFHQ、ImageNet；去模糊、超分、修补、相位恢复、非线性反卷积", "audit": {"status": "verified", "source": "ICLR 2023 论文与官方代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "zhu2023diffpir", "title": "Denoising Diffusion Models for Plug-and-Play Image Restoration", "year": 2023, "venue": "CVPR 2023", "publication_status": "peer_reviewed", "task": "image_restoration", "subtask": "general inverse problems", "family": "plug-and-play diffusion", "paper_url": "https://arxiv.org/abs/2305.08995", "code_url": "https://github.com/yuanzhi-zhu/DiffPIR",
+    "core_idea_zh": "将扩散去噪先验嵌入半二次分裂：去噪子问题恢复自然图像分布，数据子问题显式满足退化模型，支持调节感知与失真。",
+    "training": {"datasets": "无任务训练；采用预训练扩散去噪器", "crop_or_resolution": "NR", "optimizer": "不适用", "learning_rate": "不适用", "batch_size": "不适用", "schedule": "推理期 PnP 迭代", "hardware": "不适用", "pretrained_models": "预训练 diffusion denoiser", "notes": "无需为不同算子重新训练。"}, "evaluation": "经典与真实超分、去模糊、修补；PSNR/LPIPS/FID", "audit": {"status": "verified", "source": "CVPR 2023 论文与官方代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "liu2023i2sb", "title": "I²SB: Image-to-Image Schrödinger Bridge", "year": 2023, "venue": "ICML 2023", "publication_status": "peer_reviewed", "task": "image_restoration", "subtask": "paired image restoration", "family": "Schrödinger bridge", "paper_url": "https://arxiv.org/abs/2302.05872", "code_url": "https://github.com/NVlabs/I2SB",
+    "core_idea_zh": "以退化分布和清晰分布作为桥的两个端点，从解析 tractable 的 bridge 条件训练 score，使采样不必从纯高斯噪声出发。",
+    "training": {"datasets": "ImageNet 与任务配对数据", "crop_or_resolution": "256×256 为主", "optimizer": "AdamW", "learning_rate": "NR（按官方配置）", "batch_size": "NR", "schedule": "任务条件 bridge 训练", "hardware": "NR（未报告）", "pretrained_models": "可从 ImageNet diffusion 初始化", "notes": "覆盖 free-form inpainting、JPEG restoration、super-resolution。"}, "evaluation": "ImageNet restoration tasks；FID/LPIPS/PSNR", "audit": {"status": "partial", "source": "ICML 2023 论文与官方代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "yue2023resshift", "title": "ResShift: Efficient Diffusion Model for Image Super-resolution by Residual Shifting", "year": 2023, "venue": "NeurIPS 2023", "publication_status": "peer_reviewed", "task": "image_restoration", "subtask": "super-resolution", "family": "residual-shifting diffusion", "paper_url": "https://arxiv.org/abs/2307.12348", "code_url": "https://github.com/zsyOAOA/ResShift",
+    "core_idea_zh": "设计从低分辨率观测逐渐移向高分辨率目标的残差扩散路径，以较少采样步完成真实超分，并降低从随机噪声生成造成的结构漂移。",
+    "training": {"datasets": "DIV2K、Flickr2K、OST；人脸实验 FFHQ", "crop_or_resolution": "任务配置见官方 YAML", "optimizer": "AdamW", "learning_rate": "NR（按配置）", "batch_size": "NR", "schedule": "从头训练 residual-shifting diffusion", "hardware": "NR（未报告）", "pretrained_models": "无必需 T2I 基础模型", "notes": "训练退化遵循 Real-ESRGAN 类合成管线。"}, "evaluation": "RealSR、DRealSR、RealSet65、ImageNet、DIV2K；PSNR/LPIPS/CLIPIQA", "audit": {"status": "partial", "source": "NeurIPS 2023 论文与官方代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "wang2024stablesr", "title": "Exploiting Diffusion Prior for Real-World Image Super-Resolution", "year": 2024, "venue": "International Journal of Computer Vision 2024", "publication_status": "peer_reviewed", "task": "image_restoration", "subtask": "real-world super-resolution", "family": "Stable Diffusion prior", "paper_url": "https://arxiv.org/abs/2305.07015", "code_url": "https://github.com/IceClear/StableSR",
+    "core_idea_zh": "冻结 Stable Diffusion 的生成先验，训练 time-aware encoder 与 controllable feature wrapping，把低质结构逐层注入解码器并保留可调生成能力。",
+    "training": {"datasets": "LAION 高分辨率筛选子集", "crop_or_resolution": "512×512", "optimizer": "AdamW", "learning_rate": "NR（按官方配置）", "batch_size": "NR", "schedule": "条件模块训练 + 可选 VQGAN color correction", "hardware": "NR（未报告）", "pretrained_models": "Stable Diffusion 2.1", "notes": "基础 SD 参数大部分冻结。"}, "evaluation": "DIV2K-Val、RealSR、DRealSR、RealSet65；PSNR/SSIM/LPIPS/FID/NIQE", "audit": {"status": "partial", "source": "IJCV 论文与官方代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "lin2024diffbir", "title": "DiffBIR: Toward Blind Image Restoration with Generative Diffusion Prior", "year": 2024, "venue": "ECCV 2024", "publication_status": "peer_reviewed", "task": "image_restoration", "subtask": "blind restoration", "family": "restoration module + IRControlNet", "paper_url": "https://arxiv.org/abs/2308.15070", "code_url": "https://github.com/XPixelGroup/DiffBIR",
+    "core_idea_zh": "先用 task-specific restoration module 得到结构可靠的初步结果，再由 IRControlNet 控制冻结 latent diffusion 补充真实纹理，region-adaptive guidance 调节保真与生成。",
+    "training": {"datasets": "阶段 I ImageNet-1K；阶段 II 过滤 LAION-2B-en 约 15M", "crop_or_resolution": "512×512", "optimizer": "AdamW", "learning_rate": "阶段 II 1e-4 后降至 1e-5", "batch_size": "阶段 II 256", "schedule": "阶段 II 80k steps", "hardware": "NR（训练 GPU 型号/卡数未报告）", "pretrained_models": "Stable Diffusion 2.1、SwinIR", "notes": "官方配置区分 25k 小数据和 80k 大数据方案。"}, "evaluation": "盲超分、盲人脸、去模糊；RealSR/DRealSR/RealSet65 等", "audit": {"status": "partial", "source": "ECCV 2024 论文与官方代码配置", "checked": "2026-08-24"}
+  },
+  {
+    "id": "yang2024pasd", "title": "Pixel-Aware Stable Diffusion for Realistic Image Super-Resolution and Personalized Stylization", "year": 2024, "venue": "ECCV 2024", "publication_status": "peer_reviewed", "task": "image_restoration", "subtask": "real-world super-resolution", "family": "pixel-aware Stable Diffusion", "paper_url": "https://arxiv.org/abs/2308.14469", "code_url": "https://github.com/yangxy/PASD",
+    "core_idea_zh": "用 pixel-aware cross-attention 在扩散 U-Net 内保持局部结构，退化移除特征与高层语义共同作为条件，并通过噪声日程调节生成强度。",
+    "training": {"datasets": "LSDIR、FFHQ 等任务数据", "crop_or_resolution": "512×512", "optimizer": "AdamW", "learning_rate": "NR（官方脚本配置）", "batch_size": "NR", "schedule": "ControlNet/adapter 训练", "hardware": "NR（未报告）", "pretrained_models": "Stable Diffusion 1.5/SDXL", "notes": "也支持 colorization、旧照片恢复与风格化。"}, "evaluation": "RealSR、DRealSR、RealSet65、DIV2K-Val；PSNR/LPIPS/FID/NIQE", "audit": {"status": "partial", "source": "ECCV 2024 页面、论文与官方代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "wang2024sinsr", "title": "SinSR: Diffusion-Based Image Super-Resolution in a Single Step", "year": 2024, "venue": "CVPR 2024", "publication_status": "peer_reviewed", "task": "image_restoration", "subtask": "super-resolution", "family": "one-step diffusion distillation", "paper_url": "https://openaccess.thecvf.com/content/CVPR2024/html/Wang_SinSR_Diffusion-Based_Image_Super-Resolution_in_a_Single_Step_CVPR_2024_paper.html", "code_url": "https://github.com/wyf0912/SinSR",
+    "core_idea_zh": "把 ResShift 的确定性多步采样映射蒸馏到一步学生，并用 ground-truth consistency-preserving loss 修正只模仿教师造成的上限。",
+    "training": {"datasets": "DIV2K、Flickr2K、LSDIR", "crop_or_resolution": "Real-ISR 合成 crop，精确尺寸见配置", "optimizer": "AdamW", "learning_rate": "NR", "batch_size": "NR", "schedule": "teacher trajectory distillation", "hardware": "NR（未报告）", "pretrained_models": "ResShift teacher", "notes": "一步推理，最高约 10× 加速。"}, "evaluation": "RealSR、DRealSR、RealSet65、DIV2K；感知与失真指标", "audit": {"status": "partial", "source": "CVPR 2024 论文与官方代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "wu2024osediff", "title": "One-Step Effective Diffusion Network for Real-World Image Super-Resolution", "year": 2024, "venue": "NeurIPS 2024", "publication_status": "peer_reviewed", "task": "image_restoration", "subtask": "real-world super-resolution", "family": "one-step VSD + LoRA", "paper_url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/a8223b0ad64007423ffb308b0dd92298-Abstract-Conference.html", "code_url": "https://github.com/cswry/OSEDiff",
+    "core_idea_zh": "把低质图像 latent 直接作为扩散起点，只微调 LoRA 与 VAE encoder，并以 variational score distillation 约束一步输出接近真实高质分布。",
+    "training": {"datasets": "LSDIR 84,991 张 + FFHQ 前 10k；face 版 FFHQ", "crop_or_resolution": "512×512", "optimizer": "AdamW", "learning_rate": "5e-5", "batch_size": "每卡 4", "schedule": "官方训练脚本；fp16，checkpoint 每 500 step", "hardware": "官方脚本示例 4×GPU；型号 NR", "pretrained_models": "Stable Diffusion 2.1、RAM、DAPE", "notes": "LoRA rank 4；L2/LPIPS/VSD 权重由脚本公开。"}, "evaluation": "DIV2K-Val、DRealSR、RealSR；PSNR/SSIM/LPIPS/DISTS/FID/NIQE/MUSIQ", "audit": {"status": "verified", "source": "NeurIPS 2024 论文与官方训练代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "ai2024dreamclear", "title": "DreamClear: High-Capacity Real-World Image Restoration with Privacy-Safe Dataset Curation", "year": 2024, "venue": "NeurIPS 2024", "publication_status": "peer_reviewed", "task": "image_restoration", "subtask": "general real-world restoration", "family": "DiT + MLLM + mixture of adaptive modulators", "paper_url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/6452474601429509f3035dc81c233226-Abstract.html", "code_url": "https://github.com/shallowdream204/DreamClear",
+    "core_idea_zh": "GenIR 用双提示生成并筛选隐私安全高质训练图像；DreamClear 以大规模 DiT 和 MLLM 语义条件为骨干，通过 token-wise 退化先验路由修复专家。",
+    "training": {"datasets": "GenIR 生成的 1M 高质量图像", "crop_or_resolution": "NR", "optimizer": "NR", "learning_rate": "NR", "batch_size": "NR", "schedule": "GenIR 数据构造 + DreamClear 训练", "hardware": "NR（未报告）", "pretrained_models": "预训练 T2I DiT 与 MLLM", "notes": "数据集重点规避隐私与版权爬取问题。"}, "evaluation": "多种真实退化；全参考与无参考图像质量指标", "audit": {"status": "partial", "source": "NeurIPS 2024 论文与官方代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "luo2025defusion", "title": "Visual-Instructed Degradation Diffusion for All-in-One Image Restoration", "year": 2025, "venue": "CVPR 2025", "publication_status": "peer_reviewed", "task": "image_restoration", "subtask": "all-in-one restoration", "family": "degradation-space diffusion", "paper_url": "https://openaccess.thecvf.com/content/CVPR2025/html/Luo_Visual-Instructed_Degradation_Diffusion_for_All-in-One_Image_Restoration_CVPR_2025_paper.html", "code_url": "",
+    "core_idea_zh": "将标准视觉元素施加退化后形成显式视觉指令，使条件只描述退化而不混入内容语义；扩散模型在退化空间去噪，统一处理混合和未知退化。",
+    "training": {"datasets": "多任务合成与真实修复数据", "crop_or_resolution": "NR", "optimizer": "NR", "learning_rate": "NR", "batch_size": "NR", "schedule": "all-in-one joint training", "hardware": "NR（未报告）", "pretrained_models": "diffusion restoration backbone", "notes": "详细任务采样比例待补充材料核验。"}, "evaluation": "去噪、去模糊、去雾及复杂真实退化", "audit": {"status": "partial", "source": "CVPR 2025 正式论文", "checked": "2026-08-24"}
+  },
+  {
+    "id": "qin2025resflow", "title": "Reversing Flow for Image Restoration", "year": 2025, "venue": "CVPR 2025", "publication_status": "peer_reviewed", "task": "image_restoration", "subtask": "general restoration", "family": "augmented flow matching", "paper_url": "https://openaccess.thecvf.com/content/CVPR2025/html/Qin_Reversing_Flow_for_Image_Restoration_CVPR_2025_paper.html", "code_url": "",
+    "core_idea_zh": "用辅助随机变量解除从低质图到多个可能高质图的歧义，构造熵保持可逆退化流并通过 velocity matching 学习反向路径，少于四步恢复。",
+    "training": {"datasets": "多任务图像修复训练集", "crop_or_resolution": "NR", "optimizer": "NR", "learning_rate": "NR", "batch_size": "NR", "schedule": "flow-matching training", "hardware": "NR（未报告）", "pretrained_models": "NR", "notes": "确定性退化路径区别于随机扩散。"}, "evaluation": "多类合成与真实修复基准；少于 4 steps", "audit": {"status": "partial", "source": "CVPR 2025 正式论文", "checked": "2026-08-24"}
+  },
+  {
+    "id": "wang2025varformer", "title": "Navigating Image Restoration with VAR's Distribution Alignment Prior", "year": 2025, "venue": "CVPR 2025", "publication_status": "peer_reviewed", "task": "image_restoration", "subtask": "multi-task restoration", "family": "visual autoregressive prior", "paper_url": "https://openaccess.thecvf.com/content/CVPR2025/html/Wang_Navigating_Image_Restoration_with_VARs_Distribution_Alignment_Prior_CVPR_2025_paper.html", "code_url": "https://github.com/siywang541/Varformer",
+    "core_idea_zh": "利用 VAR 从粗到细的 next-scale prediction 作为清晰图像分布先验，在多个尺度逐步把退化特征对齐到自然图像 latent。",
+    "training": {"datasets": "多任务图像修复数据", "crop_or_resolution": "NR", "optimizer": "AdamW", "learning_rate": "NR", "batch_size": "NR", "schedule": "多任务联合训练", "hardware": "NR（未报告）", "pretrained_models": "预训练 VAR", "notes": "强调未知任务泛化与较低训练成本。"}, "evaluation": "去噪、去雨、去雾、去模糊、低照度等多任务", "audit": {"status": "partial", "source": "CVPR 2025 论文与官方代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "dong2025tsdsr", "title": "TSD-SR: One-Step Diffusion with Target Score Distillation for Real-World Image Super-Resolution", "year": 2025, "venue": "CVPR 2025", "publication_status": "peer_reviewed", "task": "image_restoration", "subtask": "real-world super-resolution", "family": "target-score distillation", "paper_url": "https://openaccess.thecvf.com/content/CVPR2025/html/Dong_TSD-SR_One-Step_Diffusion_with_Target_Score_Distillation_for_Real-World_Image_CVPR_2025_paper.html", "code_url": "",
+    "core_idea_zh": "目标 score 同时利用扩散先验和真实图像参考，distribution-aware sampling 强化细节区域梯度，使一步学生不只追随有偏教师。",
+    "training": {"datasets": "Real-ISR 合成训练语料", "crop_or_resolution": "NR", "optimizer": "NR", "learning_rate": "NR", "batch_size": "NR", "schedule": "one-step score distillation", "hardware": "NR（未报告）", "pretrained_models": "pretrained T2I diffusion", "notes": "报告较 SeeSR 约 40× 推理加速。"}, "evaluation": "RealSR/DRealSR/DIV2K-Val 等；全参考与无参考质量", "audit": {"status": "partial", "source": "CVPR 2025 正式论文", "checked": "2026-08-24"}
+  },
+  {
+    "id": "wei2025pure", "title": "Perceive, Understand and Restore: Real-World Image Super-Resolution with Autoregressive Multimodal Generative Models", "year": 2025, "venue": "ICCV 2025", "publication_status": "peer_reviewed", "task": "image_restoration", "subtask": "real-world super-resolution", "family": "autoregressive multimodal generation", "paper_url": "https://openaccess.thecvf.com/content/ICCV2025/html/Wei_Perceive_Understand_and_Restore_Real-World_Image_Super-Resolution_with_Autoregressive_Multimodal_ICCV_2025_paper.html", "code_url": "https://github.com/nonwhy/PURE",
+    "core_idea_zh": "对 Lumina-mGPT 做 restoration 指令微调：先感知退化和 token 依赖，再生成内容语义，最后自回归生成高质图像 token；熵感知 Top-k 改善局部结构。",
+    "training": {"datasets": "论文 Real-ISR 训练集", "crop_or_resolution": "NR", "optimizer": "NR", "learning_rate": "NR", "batch_size": "NR", "schedule": "instruction tuning", "hardware": "NR（未报告）", "pretrained_models": "Lumina-mGPT", "notes": "精确数据组成与卡数待补充材料核验。"}, "evaluation": "复杂真实超分场景；结构、感知和无参考质量", "audit": {"status": "partial", "source": "ICCV 2025 论文与官方代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "guo2025codiff", "title": "Compression-Aware One-Step Diffusion Model for JPEG Artifact Removal", "year": 2025, "venue": "ICCV 2025", "publication_status": "peer_reviewed", "task": "image_restoration", "subtask": "JPEG artifact removal", "family": "compression-aware one-step diffusion", "paper_url": "https://openaccess.thecvf.com/content/ICCV2025/html/Guo_Compression-Aware_One-Step_Diffusion_Model_for_JPEG_Artifact_Removal_ICCV_2025_paper.html", "code_url": "https://github.com/jp-guo/CODiff",
+    "core_idea_zh": "CaVE 对 JPEG 质量进行显式预测并通过重建隐式提取压缩特征，作为一步扩散的退化条件，重点恢复重压缩下的结构和纹理。",
+    "training": {"datasets": "DIV2K、Flickr2K 等合成 JPEG 对", "crop_or_resolution": "NR", "optimizer": "AdamW", "learning_rate": "NR", "batch_size": "NR", "schedule": "显式质量预测 + 隐式重建双学习", "hardware": "NR（未报告）", "pretrained_models": "pretrained latent diffusion", "notes": "具体 JPEG quality 采样范围见官方配置。"}, "evaluation": "经典/真实 JPEG artifact benchmarks；PSNR/SSIM/LPIPS/FID", "audit": {"status": "partial", "source": "ICCV 2025 论文与官方代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "yu2024supir", "title": "Scaling Up to Excellence: Practicing Model Scaling for Photo-Realistic Image Restoration In the Wild", "year": 2024, "venue": "arXiv preprint", "publication_status": "preprint", "task": "image_restoration", "subtask": "general real-world restoration", "family": "scaled multimodal diffusion prior", "paper_url": "https://arxiv.org/abs/2401.13627", "code_url": "https://github.com/Fanghua-Yu/SUPIR",
+    "core_idea_zh": "以大规模图文数据和更大生成模型提升通用修复能力；正/负质量提示控制细节，restoration-guided sampling 把生成先验拉回输入结构。",
+    "training": {"datasets": "20M 高分辨率高质量图像及文本标注", "crop_or_resolution": "NR", "optimizer": "NR", "learning_rate": "NR", "batch_size": "NR", "schedule": "大规模多模态修复训练", "hardware": "NR（未报告）", "pretrained_models": "SDXL-class generative prior、LLaVA", "notes": "当前无正式会议/期刊版本。"}, "evaluation": "真实低质照片、文字引导修复；感知/无参考指标与主观比较", "audit": {"status": "partial", "source": "arXiv 与官方代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "wang2025irbridge", "title": "IRBridge: Solving Image Restoration Bridge with Pre-trained Generative Diffusion Models", "year": 2025, "venue": "arXiv preprint", "publication_status": "preprint", "task": "image_restoration", "subtask": "multi-task restoration", "family": "pretrained diffusion bridge", "paper_url": "https://arxiv.org/abs/2505.24406", "code_url": "",
+    "core_idea_zh": "推导两个具有相同终点分布的扩散过程之间的 transition equation，把从退化图像出发的 restoration bridge 接到预训练噪声扩散模型，减少逐任务从头训练。",
+    "training": {"datasets": "六类修复任务数据；精确划分待核验", "crop_or_resolution": "NR", "optimizer": "NR", "learning_rate": "NR", "batch_size": "NR", "schedule": "轻量 bridge adaptation", "hardware": "NR（未报告）", "pretrained_models": "pretrained generative diffusion models", "notes": "预印本公开材料未完整披露复现配置。"}, "evaluation": "六类 image restoration tasks；鲁棒性和泛化", "audit": {"status": "partial", "source": "arXiv v1", "checked": "2026-08-24"}
+  },
+  {
+    "id": "hadzic2025restoraflow", "title": "Restora-Flow: Mask-Guided Image Restoration with Flow Matching", "year": 2025, "venue": "arXiv preprint", "publication_status": "preprint", "task": "image_restoration", "subtask": "mask-based restoration", "family": "training-free flow matching", "paper_url": "https://arxiv.org/abs/2511.20152", "code_url": "",
+    "core_idea_zh": "在预训练 flow 的采样轨迹中加入退化 mask 引导，并用 trajectory correction 反复投影到已知观测，兼顾生成细节和测量一致性。",
+    "training": {"datasets": "无任务训练", "crop_or_resolution": "不适用", "optimizer": "不适用", "learning_rate": "不适用", "batch_size": "不适用", "schedule": "training-free inference guidance", "hardware": "不适用", "pretrained_models": "pretrained flow-matching model", "notes": "覆盖 mask 可表达的 inpainting、SR、denoising。"}, "evaluation": "自然与医学数据；修补、超分、去噪；质量和耗时", "audit": {"status": "verified", "source": "arXiv v1", "checked": "2026-08-24"}
+  },
+  {
+    "id": "bai2026resflowtuner", "title": "Tuning Real-World Image Restoration at Inference: A Test-Time Scaling Paradigm for Flow Matching Models", "year": 2026, "venue": "arXiv preprint", "publication_status": "preprint", "task": "image_restoration", "subtask": "real-world restoration", "family": "FLUX + reward-guided test-time scaling", "paper_url": "https://arxiv.org/abs/2603.22027", "code_url": "",
+    "core_idea_zh": "UMMF 把低质图、文本等条件统一为 MM-DiT token 序列；推理时以奖励模型反馈动态修正 flow 方向，用更多计算换取更好恢复。",
+    "training": {"datasets": "适配训练数据 NR（未报告）", "crop_or_resolution": "NR", "optimizer": "NR", "learning_rate": "NR", "batch_size": "NR", "schedule": "参数适配 + test-time scaling", "hardware": "NR（未报告）", "pretrained_models": "FLUX.1-dev、restoration reward model", "notes": "TTS 属于推理期优化，不计作离线训练步数。"}, "evaluation": "多个真实图像修复标准基准；感知与无参考质量", "audit": {"status": "partial", "source": "arXiv v1", "checked": "2026-08-24"}
+  },
+  {
+    "id": "duan2026qfm", "title": "Beyond Fixed Inference: Quantitative Flow Matching for Adaptive Image Denoising", "year": 2026, "venue": "arXiv preprint", "publication_status": "preprint", "task": "image_restoration", "subtask": "adaptive denoising", "family": "noise-adaptive flow matching", "paper_url": "https://arxiv.org/abs/2604.02392", "code_url": "",
+    "core_idea_zh": "从局部像素统计估计输入噪声强度，并据此联合选择 ODE 起点、积分步数和步长日程，使同一 flow 在未知噪声下保持轨迹匹配。",
+    "training": {"datasets": "自然、医学和显微图像；精确训练划分 NR", "crop_or_resolution": "NR", "optimizer": "NR", "learning_rate": "NR", "batch_size": "NR", "schedule": "flow-matching training；推理期自适应步数", "hardware": "NR（未报告）", "pretrained_models": "NR", "notes": "轻噪声少步、重噪声增加积分细化。"}, "evaluation": "自然、医学、显微图像多噪声水平；PSNR/SSIM/效率", "audit": {"status": "partial", "source": "arXiv v1", "checked": "2026-08-24"}
+  }
+]

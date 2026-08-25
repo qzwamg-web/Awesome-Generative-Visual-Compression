@@ -658,5 +658,55 @@
     "training": {"datasets": "OpenVid-HD 中筛选 36,971 个高质量视频片段", "crop_or_resolution": "256×256 random crop；GOP=32", "optimizer": "Adam，β1=0.9、β2=0.999", "learning_rate": "NR（论文未报告）", "batch_size": "阶段 I/II/III 分别为 24/6/2", "schedule": "三阶段分别 120k/60k/108k steps", "hardware": "NR（训练 GPU 型号与卡数均未报告）", "pretrained_models": "Wan-2.1 VACE 1.3B；LoRA rank 32；latent codec 参考 DCVC-RT", "notes": "采用真实熵编码；论文只致谢超算中心，不能据此推断训练卡。"},
     "evaluation": "HEVC Class B-E、UVG、MCL-JCV 前 96 帧；PSNR/MS-SSIM、LPIPS/DISTS/FID/KID、Ewarp/FloLPIPS/tOF/CLIP-F",
     "audit": {"status": "verified", "source": "arXiv v1 正文、实现细节与参考文献", "checked": "2026-08-24"}
+  },
+  {
+    "id": "feng2025difficmh", "title": "Diff-ICMH: Harmonizing Machine and Human Vision in Image Compression with Generative Prior", "year": 2025, "venue": "NeurIPS 2025", "publication_status": "peer_reviewed", "task": "image", "family": "diffusion prior + semantic consistency", "paper_url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/5c33e9aedee21daeda9e03f43ec4865d-Abstract-Conference.html", "code_url": "https://github.com/RuoyuFeng/Diff-ICMH",
+    "core_idea_zh": "以同一码流同时服务人眼重建与机器视觉：生成先验提高统计真实性，Semantic Consistency loss 保持下游语义，Tag Guidance Module 以极少附加比特激活扩散模型的高层语义。",
+    "training": {"datasets": "自然图像压缩训练集；精确组成待补充材料核验", "crop_or_resolution": "NR", "optimizer": "NR", "learning_rate": "NR", "batch_size": "NR", "schedule": "codec 与生成先验适配联合训练", "hardware": "NR（未报告）", "pretrained_models": "预训练 diffusion prior 与图像 tagger", "notes": "单 codec/bitstream 支持多种机器任务。"}, "evaluation": "Kodak/CLIC 等感知压缩集及分类、检测、分割任务", "audit": {"status": "partial", "source": "NeurIPS 2025 正式论文与官方代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "guo2025oscar", "title": "OSCAR: One-Step Diffusion Codec Across Multiple Bit-rates", "year": 2025, "venue": "NeurIPS 2025", "publication_status": "peer_reviewed", "task": "image", "family": "one-step multi-rate diffusion", "paper_url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/7b372097a499ce99a4b1e41feb79493a-Abstract-Conference.html", "code_url": "https://github.com/jp-guo/OSCAR",
+    "core_idea_zh": "把不同码率的压缩 latent 视作扩散轨迹上不同噪声强度的中间状态，以 bpp 映射的伪时间步调制同一个 Stable Diffusion 解码器，实现多码率一步重建。",
+    "training": {"datasets": "OpenImages（按论文训练划分）", "crop_or_resolution": "512×512", "optimizer": "阶段 I Adam；阶段 II AdamW", "learning_rate": "阶段 I 2e-5；阶段 II 5e-5", "batch_size": "阶段 I 64；阶段 II 32", "schedule": "阶段 I 10k iterations；阶段 II 见补充材料", "hardware": "1×NVIDIA RTX A6000", "pretrained_models": "Stable Diffusion 2.1", "notes": "阶段 II weight decay 1e-5；多个 hyper-encoder 并行训练。"}, "evaluation": "Kodak、CLIC2020、DIV2K；LPIPS/DISTS/MUSIQ/CLIPIQA 与速度", "audit": {"status": "verified", "source": "NeurIPS 2025 论文、补充材料与官方代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "han2025rvgic", "title": "Generative Image Compression by Estimating Gradients of the Rate-variable Feature Distribution", "year": 2025, "venue": "arXiv preprint", "publication_status": "preprint", "task": "image", "family": "rate-variable compression SDE", "paper_url": "https://arxiv.org/abs/2505.20984", "code_url": "",
+    "core_idea_zh": "把压缩过程本身解释为由 SDE 描述的前向扩散路径，训练网络估计不同码率特征分布的 score，从压缩 latent 直接反演到真实图像而无需高斯噪声初始化。",
+    "training": {"datasets": "自然图像压缩训练集 NR", "crop_or_resolution": "NR", "optimizer": "NR", "learning_rate": "NR", "batch_size": "NR", "schedule": "rate-variable score training", "hardware": "NR（未报告）", "pretrained_models": "NR", "notes": "支持连续码率调节和少步采样。"}, "evaluation": "Kodak、DIV2K 等；感知失真、统计保真与无参考质量", "audit": {"status": "partial", "source": "arXiv v1", "checked": "2026-08-24"}
+  },
+  {
+    "id": "park2026diffo", "title": "Single-step Diffusion for Image Compression at Ultra-Low Bitrates", "year": 2026, "venue": "WACV 2026", "publication_status": "peer_reviewed", "task": "image", "family": "VQ-residual one-step diffusion", "paper_url": "https://openaccess.thecvf.com/content/WACV2026/html/Park_Single-step_Diffusion_for_Image_Compression_at_Ultra-Low_Bitrates_WACV_2026_paper.html", "code_url": "https://github.com/Freemasti/DiffO",
+    "core_idea_zh": "VQ-Residual 将结构 base code 与高频 residual 分开学习，rate-aware noise modulation 按目标 bpp 设置一步去噪强度，以约 50 倍速度提升替代多步扩散。",
+    "training": {"datasets": "自然图像压缩训练集；官方配置待逐项核验", "crop_or_resolution": "NR", "optimizer": "NR", "learning_rate": "NR", "batch_size": "NR", "schedule": "VQ/residual 预训练 + diffusion 60k steps", "hardware": "官方命令支持 1×GPU；型号 NR", "pretrained_models": "ResShift-based diffusion backbone", "notes": "代码 checkpoint 命名显示 60k steps。"}, "evaluation": "Kodak、CLIC、DIV2K；LPIPS/DISTS/FID 与解码速度", "audit": {"status": "partial", "source": "WACV 2026 论文与官方代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "sheng2026cadc", "title": "CADC: Content Adaptive Diffusion-Based Generative Image Compression", "year": 2026, "venue": "CVPR 2026", "publication_status": "peer_reviewed", "task": "image", "family": "content-adaptive one-step diffusion", "paper_url": "https://openaccess.thecvf.com/content/CVPR2026/html/Sheng_CADC_Content_Adaptive_Diffusion-Based_Generative_Image_Compression_CVPR_2026_paper.html", "code_url": "",
+    "core_idea_zh": "UGAQ 按空间不确定性调整量化，ADGIC 迫使主 latent 通道集中保留关键内容，BFATC 从辅助重建生成零附加码率文本条件，使编码与扩散先验全链路内容自适应。",
+    "training": {"datasets": "自然图像压缩训练集；精确名称待补充材料核验", "crop_or_resolution": "NR", "optimizer": "NR", "learning_rate": "NR", "batch_size": "NR", "schedule": "codec + distilled diffusion joint training", "hardware": "NR（未报告）", "pretrained_models": "Stable Diffusion 2.1", "notes": "一步扩散解码；文本条件由辅助重建在解码端导出。"}, "evaluation": "Kodak、CLIC、DIV2K；LPIPS/DISTS/FID/KID", "audit": {"status": "partial", "source": "CVPR 2026 正式论文", "checked": "2026-08-24"}
+  },
+  {
+    "id": "jiang2026rdvq", "title": "Differentiable Vector Quantization for Rate-Distortion Optimization of Generative Image Compression", "year": 2026, "venue": "CVPR 2026 Oral", "publication_status": "peer_reviewed", "task": "image", "family": "differentiable VQ + autoregressive entropy", "paper_url": "https://openaccess.thecvf.com/content/CVPR2026/html/Jiang_Differentiable_Vector_Quantization_for_Rate-Distortion_Optimization_of_Generative_Image_Compression_CVPR_2026_paper.html", "code_url": "https://github.com/CVL-UESTC/RDVQ",
+    "core_idea_zh": "用可微码本分布松弛让 entropy loss 直接塑造生成 token prior，再以自回归熵模型编码 token 前缀，统一率失真训练并支持测试时码率控制。",
+    "training": {"datasets": "自然图像训练集；精确名称待官方配置核验", "crop_or_resolution": "NR", "optimizer": "NR", "learning_rate": "NR", "batch_size": "NR", "schedule": "end-to-end RD optimization", "hardware": "NR（RTX 4090 仅为推理测量）", "pretrained_models": "VQ generative tokenizer", "notes": "约 250M 参数；不把推理 GPU 误记为训练卡。"}, "evaluation": "Kodak、DIV2K；DISTS/LPIPS/FID 与参数/速度", "audit": {"status": "partial", "source": "CVPR 2026 正式论文与官方代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "shi2026ditic", "title": "DiT-IC: Aligned Diffusion Transformer for Efficient Image Compression", "year": 2026, "venue": "CVPR 2026", "publication_status": "peer_reviewed", "task": "image", "family": "32x latent one-step DiT", "paper_url": "https://openaccess.thecvf.com/content/CVPR2026/html/Shi_DiT-IC_Aligned_Diffusion_Transformer_for_Efficient_Image_Compression_CVPR_2026_paper.html", "code_url": "https://github.com/Eric-qi/DiT-IC",
+    "core_idea_zh": "在 32× 深压缩 latent 上运行 DiT，以不确定性引导的 reconstruction flow、自蒸馏 latent 几何对齐和 latent 条件引导把多步文生图先验改造成文本无关的一步 codec。",
+    "training": {"datasets": "LSDIR 约 50k + MLIC-Train-100K", "crop_or_resolution": "256×256", "optimizer": "官方 YAML 配置", "learning_rate": "官方 YAML 配置", "batch_size": "官方 YAML 配置", "schedule": "阶段 I 无 GAN；阶段 II GAN 微调", "hardware": "官方复现命令 2×GPU；型号 NR", "pretrained_models": "DiT-SANA、ELIC auxiliary encoder", "notes": "LoRA rank 32/64 或 64/128；支持单卡微调。"}, "evaluation": "Kodak、CLIC2020、DIV2K；LPIPS/DISTS/FID、内存与速度", "audit": {"status": "verified", "source": "CVPR 2026 论文与官方训练代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "jia2026codlite", "title": "CoD-Lite: Real-Time Diffusion-Based Generative Image Compression", "year": 2026, "venue": "arXiv preprint", "publication_status": "preprint", "task": "image", "family": "lightweight one-step convolution diffusion", "paper_url": "https://arxiv.org/abs/2604.12525", "code_url": "https://github.com/microsoft/GenCodec/tree/main/CoD_Lite",
+    "core_idea_zh": "发现小模型更受益于压缩原生预训练而非通用生成预训练，并以轻量卷积扩散替代 DiT；再结合蒸馏和对抗训练，实现 1080p 实时生成式压缩。",
+    "training": {"datasets": "压缩原生预训练数据；精确组成待论文核验", "crop_or_resolution": "NR", "optimizer": "NR", "learning_rate": "NR", "batch_size": "NR", "schedule": "compression pretraining + one-step distillation + adversarial training", "hardware": "NR（未报告）", "pretrained_models": "CoD compression-oriented teacher", "notes": "1080p 60/42 FPS 为推理编码/解码速度。"}, "evaluation": "Kodak、CLIC、DIV2K；FID/LPIPS/DISTS 与 1080p 吞吐", "audit": {"status": "partial", "source": "arXiv v1 与官方代码", "checked": "2026-08-24"}
+  },
+  {
+    "id": "huang2026flowcodec", "title": "FlowCodec: One-Step Flow Prior for Generative Image Compression", "year": 2026, "venue": "arXiv preprint", "publication_status": "preprint", "task": "image", "family": "one-step flow prior", "paper_url": "https://arxiv.org/abs/2606.21030", "code_url": "",
+    "core_idea_zh": "把 codec 拆为将 clean latent 压成 bitrate-constrained noisy latent 的 Latent Compression，以及利用 Qwen-Image/FLUX 将其一步传输回 clean latent 的 Latent Transport；无需额外条件分支。",
+    "training": {"datasets": "自然图像压缩适配集 NR", "crop_or_resolution": "NR", "optimizer": "NR", "learning_rate": "NR", "batch_size": "NR", "schedule": "lightweight multi-rate adaptation", "hardware": "NR（未报告）", "pretrained_models": "Qwen-Image-2512、FLUX.1-dev", "notes": "可训练参数低于生成 backbone 的 0.54%；码率低于 0.05 bpp。"}, "evaluation": "Kodak、CLIC、DIV2K；LPIPS/DISTS/PSNR 与编码解码速度", "audit": {"status": "partial", "source": "arXiv v1", "checked": "2026-08-24"}
+  },
+  {
+    "id": "chen2025gvc001", "title": "Generative Video Compression: Towards 0.01% Compression Rate for Video Transmission", "year": 2025, "venue": "arXiv preprint", "publication_status": "preprint", "task": "video", "family": "semantic generative video transmission", "paper_url": "https://arxiv.org/abs/2512.24300", "code_url": "",
+    "core_idea_zh": "以面向感知和任务的紧凑语义表示替代像素残差，把带宽成本转移为接收端生成计算，并设计 compression-computation trade-off 以在消费级 GPU 上接近可部署的极低码率传输。",
+    "training": {"datasets": "视频生成/压缩适配数据 NR", "crop_or_resolution": "NR", "optimizer": "NR", "learning_rate": "NR", "batch_size": "NR", "schedule": "NR", "hardware": "NR（消费级 GPU 为推理部署讨论）", "pretrained_models": "modern generative video model", "notes": "报告部分样例约 0.02% compression rate；属于语义传输范式。"}, "evaluation": "视频传输样例；压缩率、感知/任务质量和推理成本", "audit": {"status": "partial", "source": "arXiv v1", "checked": "2026-08-24"}
   }
 ]

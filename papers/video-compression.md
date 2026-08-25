@@ -31,6 +31,7 @@
 |---:|:---:|---|---|---|---|---|
 | 2025 | ◐ | [Conditional Video Generation for High-Efficiency Video Compression](https://arxiv.org/abs/2507.15269) | 多条件视频扩散 | NR（未报告） | NR（未报告） | 由多粒度稀疏条件生成视频，以模态 dropout 防止模型依赖单一信号。 |
 | 2025 | ◐ | [GLVC](https://arxiv.org/abs/2510.09987) | 连续 tokenizer + memory | Vimeo 系列（精确版本待核验） | NR（训练卡未报告） | 连续生成 latent 中统一 I/P 帧编码，并用递归记忆聚合长期信息。 |
+| 2025 | ◐ | [Generative Video Compression: Towards 0.01% Compression Rate](https://arxiv.org/abs/2512.24300) | 语义生成式传输 | NR（未报告） | NR（消费级 GPU 仅推理） | 将带宽压力转移到接收端生成计算，并显式权衡压缩率与推理成本。 |
 | 2026 | ◐ | [DiffVC-RT](https://arxiv.org/abs/2601.20564) | 实时扩散 | Vimeo-90K（长序列策略待核验） | NR（H800 仅为推理测试） | 剪枝、Online Temporal Shift、异步并行和半精度实现实时推理。 |
 | 2026 | ✅ | [Free-GVC](https://arxiv.org/abs/2602.09868) | training-free 视频扩散 | 无（training-free） | 不适用 | 沿扩散 latent 轨迹编码，以跨 GOP 对齐改善时间一致性。 |
 | 2026 | ✅ | [Compression as Adaptation](https://arxiv.org/abs/2603.07615) | 隐式适配 + 扩散 | 无统一离线训练集；逐视频拟合 | 8×A100 并行实例；单实例 1×A100 | 把视频编码为冻结扩散模型上的量化 LoRA 适配向量。 |

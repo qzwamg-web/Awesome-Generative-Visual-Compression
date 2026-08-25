@@ -1,13 +1,13 @@
-# Awesome Generative Image & Video Compression
+# Awesome Generative Visual Compression & Restoration
 
-面向**生成式图像编码（GIC）**与**生成式视频编码（GVC）**的中文论文索引。项目不仅记录论文、代码和发表信息，还逐篇整理训练数据、裁剪尺寸、优化器、学习率、batch size、训练步数、训练硬件，以及可直接用于研究复现的中文方法摘要。
+面向**生成式图像编码（GIC）**、**生成式视频编码（GVC）**与**生成式图像修复（GIR）**的中文论文索引。项目不仅记录论文、代码和发表信息，还逐篇整理训练数据、裁剪尺寸、优化器、学习率、batch size、训练步数、训练硬件，以及可直接用于研究复现的中文方法摘要。
 
 > 时间范围：2016-08-24 至 2026-08-24（滚动十年窗口）。最后检索：2026-08-24。
 
 ## 收录原则
 
-- 核心任务必须是图像或视频的有损压缩/编码；仅把生成模型当作数据增强工具的工作不收录。
-- 方法必须显式利用 GAN、扩散/流模型、生成式 tokenizer、预训练生成先验或隐式神经表示来改善重建真实性、感知质量或极低码率表现。
+- 压缩类工作的核心任务必须是图像或视频的有损压缩/编码；修复类工作的核心任务必须是从退化观测恢复高质量图像。
+- 方法必须显式利用 GAN、扩散/score/flow、生成式 tokenizer、自回归模型、预训练生成先验或隐式神经表示；仅把生成模型当作数据增强工具的工作不收录。
 - 正式会议/期刊论文进入主表；高度相关但尚未正式发表的论文进入 Preprint 表。
 - 训练信息仅来自论文正文、补充材料或官方代码。未披露字段统一写作 `NR（未报告）`，不做推断。
 
@@ -23,7 +23,9 @@
 
 - [生成式图像编码论文](papers/image-compression.md)
 - [生成式视频编码论文](papers/video-compression.md)
-- [结构化论文数据](data/papers.json)
+- [生成式图像修复论文](papers/image-restoration.md)
+- [压缩论文结构化数据](data/papers.json)
+- [修复论文结构化数据](data/restoration-papers.json)
 
 ## 代表性路线
 
@@ -34,6 +36,7 @@
 | 基础生成模型先验 | FD-LIC、StableCodec、CoD | 借助大模型先验减少从零训练成本，但需解决条件对齐与可控忠实度 |
 | 生成 latent/token 编码 | GLC、DLF、GVC1D | 在更语义化的空间中去冗余，适合超低码率；token 预测误差可能引入内容漂移 |
 | 隐式神经表示 | GIViC | 模型/参数即码流，随机访问与编码时延通常是主要瓶颈 |
+| 生成式图像修复 | DiffBIR、OSEDiff、ResFlow | 生成细节强，但必须约束语义幻觉、结构忠实度和采样成本 |
 
 ## 数据字段
 
@@ -41,7 +44,7 @@
 
 ## 当前覆盖
 
-当前索引共收录 44 篇工作，覆盖 2016–2026，并建立 2025–2026 高相关预印本观察表；近期主线包括 DiffVC-ONE、GenVC/ASD、YODA、S2VC、GNVC-VD、ZeroGVC、ReGenVC、DiffVC-RT、GLVC 与 GVC-RT。
+当前压缩索引共收录 54 篇工作，另收录 25 篇生成式图像修复工作，覆盖 2016–2026。近期编码主线包括 DiffVC-ONE、GenVC/ASD、FlowCodec、CoD-Lite、CADC、DiT-IC、ZeroGVC 与 ReGenVC；修复部分重点覆盖扩散逆问题、生成式超分、统一盲修复与 flow-matching 路线。
 
 ## Citation
 
