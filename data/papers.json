@@ -695,6 +695,31 @@
     "training": {"datasets": "LSDIR 约 50k + MLIC-Train-100K", "crop_or_resolution": "256×256", "optimizer": "官方 YAML 配置", "learning_rate": "官方 YAML 配置", "batch_size": "官方 YAML 配置", "schedule": "阶段 I 无 GAN；阶段 II GAN 微调", "hardware": "官方复现命令 2×GPU；型号 NR", "pretrained_models": "DiT-SANA、ELIC auxiliary encoder", "notes": "LoRA rank 32/64 或 64/128；支持单卡微调。"}, "evaluation": "Kodak、CLIC2020、DIV2K；LPIPS/DISTS/FID、内存与速度", "audit": {"status": "verified", "source": "CVPR 2026 论文与官方训练代码", "checked": "2026-08-24"}
   },
   {
+    "id": "zhang2026aeic",
+    "title": "Ultra-Low Bitrate Perceptual Image Compression with Shallow Encoder",
+    "year": 2026,
+    "venue": "CVPR 2026",
+    "publication_status": "peer_reviewed",
+    "task": "image",
+    "family": "shallow encoder + one-step diffusion + dual-side distillation",
+    "paper_url": "https://openaccess.thecvf.com/content/CVPR2026/html/Zhang_Ultra-Low_Bitrate_Perceptual_Image_Compression_with_Shallow_Encoder_CVPR_2026_paper.html",
+    "code_url": "https://github.com/LuizScarlet/AEIC",
+    "core_idea_zh": "AEIC 针对低于 0.05 bpp 时潜变量有效复杂度下降的现象，将计算负担从弱发送端转移到强接收端：AEIC-SE 用浅层像素域分析变换、超先验和四分组空间上下文生成真实码流，解码端由合成变换产生扩散输入 latent 与 residual，再经一步 SD-Turbo UNet 和 Half-VAE Decoder 重建图像。训练时以中等编码器 AEIC-ME 为教师，先对齐四级编码特征，再对齐多级 UNet 特征与 residual；教师及投影层均不进入部署路径。",
+    "training": {
+      "datasets": "Flickr2K（2,560 张）+ DIV2K train（800 张）+ CLIC（585 train + 41 validation + 60 CLIC 2021 test）+ LSDIR 前 10,000 张",
+      "crop_or_resolution": "S1/S2：512×512 random crop；S3：1024×1024 high-resolution finetuning",
+      "optimizer": "AdamW；DINOv3 vision-aided discriminator 亦使用 AdamW",
+      "learning_rate": "S1：1e-4，180k 后 5e-5；S2：5e-5→2e-5→1e-5→5e-6→1e-6；S3：2e-5→1e-5→5e-6→1e-6",
+      "batch_size": "有效 batch：S1=8、S2=32、S3=8；默认每卡 batch=1，分别累积 4/16/4 step",
+      "schedule": "S1 编码侧蒸馏预训练 250k step；S2 解码侧蒸馏与 GAN 微调 30k step；S3 高分辨率微调 5k step",
+      "hardware": "2×NVIDIA RTX 3090 24GB（AEIC-SE 官方配置默认设置）",
+      "pretrained_models": "SD-Turbo、Half-VAE Decoder；预训练 AEIC-ME 作为冻结教师",
+      "notes": "S1 使用 Rate+L2+LPIPS+CLIP+编码特征蒸馏；S2/S3 使用 Rate+L2+DISTS+CLIP+对抗损失，S2 前约 20k step 另含 UNet/residual 蒸馏。支持 C++ 实际熵编码。官方 pretrain_SE.sh 当前误指 config/pretrain_AEIC_ME.yaml，复现时应改为 pretrain_AEIC_SE.yaml。"
+    },
+    "evaluation": "Kodak 24 张、DIV2K validation 100 张、CLIC 2020 test 428 张；PSNR/MS-SSIM、LPIPS/DISTS/FID/KID、用户研究、参数/MAC 与实际熵编码时延；论文报告 AEIC-SE 达到 35.8 FPS@1080p 编码",
+    "audit": {"status": "verified", "source": "CVPR 2026 正式论文、官方 README、AEIC_trainer/codec/compress 实现与公开 YAML 配置", "checked": "2026-08-25"}
+  },
+  {
     "id": "jia2026codlite", "title": "CoD-Lite: Real-Time Diffusion-Based Generative Image Compression", "year": 2026, "venue": "arXiv preprint", "publication_status": "preprint", "task": "image", "family": "lightweight one-step convolution diffusion", "paper_url": "https://arxiv.org/abs/2604.12525", "code_url": "https://github.com/microsoft/GenCodec/tree/main/CoD_Lite",
     "core_idea_zh": "发现小模型更受益于压缩原生预训练而非通用生成预训练，并以轻量卷积扩散替代 DiT；再结合蒸馏和对抗训练，实现 1080p 实时生成式压缩。",
     "training": {"datasets": "压缩原生预训练数据；精确组成待论文核验", "crop_or_resolution": "NR", "optimizer": "NR", "learning_rate": "NR", "batch_size": "NR", "schedule": "compression pretraining + one-step distillation + adversarial training", "hardware": "NR（未报告）", "pretrained_models": "CoD compression-oriented teacher", "notes": "1080p 60/42 FPS 为推理编码/解码速度。"}, "evaluation": "Kodak、CLIC、DIV2K；FID/LPIPS/DISTS 与 1080p 吞吐", "audit": {"status": "partial", "source": "arXiv v1 与官方代码", "checked": "2026-08-24"}
