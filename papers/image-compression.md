@@ -27,6 +27,7 @@
 | 2026 | ◐ | [CADC](https://openaccess.thecvf.com/content/CVPR2026/html/Sheng_CADC_Content_Adaptive_Diffusion-Based_Generative_Image_Compression_CVPR_2026_paper.html) | CVPR | 内容自适应扩散 | 自然图像集（待补充材料核验） | NR（未报告） | 自适应量化、信息集中与零比特文本条件共同对齐 codec 和生成先验。 |
 | 2026 | ◐ | [RDVQ](https://openaccess.thecvf.com/content/CVPR2026/html/Jiang_Differentiable_Vector_Quantization_for_Rate-Distortion_Optimization_of_Generative_Image_Compression_CVPR_2026_paper.html) | CVPR Oral | 可微 VQ + AR 熵模型 | 自然图像集（待配置核验） | NR（4090 仅推理） | 用可微码本分布端到端优化率失真，并以 token 前缀支持测试时码率控制。 |
 | 2026 | ✅ | [DiT-IC](https://openaccess.thecvf.com/content/CVPR2026/html/Shi_DiT-IC_Aligned_Diffusion_Transformer_for_Efficient_Image_Compression_CVPR_2026_paper.html) | CVPR | 32× latent 一步 DiT | LSDIR + MLIC-Train-100K | 官方复现 2×GPU；型号 NR | 在深压缩 latent 上以 flow、自蒸馏和 latent 条件完成文本无关的一步 DiT 解码。 |
+| 2026 | ✅ | [Ultra-Low Bitrate Perceptual Image Compression with Shallow Encoder](https://openaccess.thecvf.com/content/CVPR2026/html/Zhang_Ultra-Low_Bitrate_Perceptual_Image_Compression_with_Shallow_Encoder_CVPR_2026_paper.html) | CVPR | 浅编码器 + 一步扩散 + 双侧蒸馏 | Flickr2K + DIV2K + CLIC + LSDIR-10K | 2×RTX 3090 24GB | AEIC 将算力从发送端迁移到一步 SD-Turbo 解码器，并以 AEIC-ME 对浅层 AEIC-SE 做编码侧与解码侧特征蒸馏，实现超低码率实时编码。 |
 
 ## 高相关预印本
 
