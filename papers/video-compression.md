@@ -18,6 +18,7 @@
 | 2025 | ◐ | [DiffVC-OSD](https://arxiv.org/abs/2508.07682) | VCIP | 一步扩散 | Vimeo-90K | NR（训练卡未报告） | 从无噪重建 latent 一步生成，并用 temporal adapter 注入上下文。 |
 | 2026 | ✅ | [GVC1D](https://arxiv.org/abs/2603.15302) | CVPR | 1-D latent + memory | Vimeo-90K/扩展 32 帧 Vimeo；OpenVid-HD | NR（未报告） | 一维 token 消除网格冗余，长期记忆聚合跨帧共同语义。 |
 | 2026 | ✅ | [GNVC-VD](https://openaccess.thecvf.com/content/CVPR2026/html/Mao_Generative_Neural_Video_Compression_via_Video_Diffusion_Prior_CVPR_2026_paper.html) | CVPR | VideoDiT + flow matching | Vimeo-90K | 2×NVIDIA A800 | Wan2.1 视频先验做序列级生成细化，减少逐帧先验的结构幻觉与闪烁。 |
+| 2026 | ✅ | [ProGVC](https://arxiv.org/abs/2603.17546) | ECCV | 多尺度残差 token + 视觉自回归 | Pexels 筛选约 480K 视频 | NR（未报告） | 同一多尺度 AR 模型既为已传 token 提供算术编码概率，也生成未传细尺度 token；按尺度截断原生支持渐进传输与可变码率。 |
 | 2026 | ◐ | [S2VC](https://openaccess.thecvf.com/content/CVPR2026/html/Xue_Single-step_Diffusion-based_Video_Coding_with_Semantic-Temporal_Guidance_CVPR_2026_paper.html) | CVPR | 一步扩散 | NR（数据集待补充材料核验） | 4×NVIDIA A100 80GB | 用 codec 上下文构造语义/时间引导，把多步扩散压缩为一步。 |
 | 2026 | ✅ | [YODA](https://arxiv.org/abs/2601.01141) | IEEE TCSVT Early Access | TA-AE + linear DiT | Vimeo-90K septuplet | NR（训练卡未报告） | 多尺度历史参考、条件 latent coder 与一步 DiT 端到端联合训练。 |
 | 2026 | ◐ | [GVC-RT](https://arxiv.org/abs/2608.04891) | ACM MM | LFQ 生成 latent | Vimeo-90K；扩展 29 帧序列微调 | NR（训练卡未报告） | 训练期对齐 LFQ 空间，推理期移除重分支并用轻量 detokenizer 实时解码。 |
@@ -40,6 +41,7 @@
 | 2026 | ✅ | [ZeroGVC](https://arxiv.org/abs/2606.22371) | zero-shot 自回归扩散 | 无额外训练（zero-shot） | 不适用 | 以可复现码本噪声少步重建 P 帧，并可无额外码率使用下一 I 帧抑制误差传播。 |
 | 2026 | ✅ | [GenVC / Adaptive Score Distillation](https://arxiv.org/abs/2607.22772) | 压缩原生像素扩散 | OpenVid | 4×NVIDIA A100 80GB | 从零训练压缩专用视频扩散，并门控会导致运动停滞的错误 DMD 更新。 |
 | 2026 | ◐ | [ReGenVC](https://arxiv.org/abs/2607.28144) | 姿态条件四步 VideoDiT | talking-head 蒸馏数据 NR | 训练卡 NR；8 卡仅实时解码 | 首帧与姿态构成极小码流，以蒸馏和多卡流水实现 24 fps 解码。 |
+| 2026 | ✅ | [GVCCTurbo](https://arxiv.org/abs/2608.03517) | 零训练生成轨迹调度 | 无（zero-shot） | 不适用；1×RTX PRO 6000 仅测试 | 将昂贵先验刷新与带码率的码本修正解耦，以目标 BPP 决定轨迹长度和刷新周期；在保持修正槽位时把 20 次先验计算降至 9 次。 |
 | 2026 | ✅ | [DiffVC-ONE](https://arxiv.org/abs/2608.20515) | 一步 VideoDiT + 统一 latent codec | OpenVid-HD（36,971 clips） | NR（型号与卡数均未报告） | U2LC 统一压缩 latent slices，混合条件控制一步 VideoDiT 对整 GOP 做时空增强。 |
 
 逐篇训练配置与核验证据见 [`data/papers.json`](../data/papers.json)。
