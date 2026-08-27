@@ -733,5 +733,80 @@
     "id": "chen2025gvc001", "title": "Generative Video Compression: Towards 0.01% Compression Rate for Video Transmission", "year": 2025, "venue": "arXiv preprint", "publication_status": "preprint", "task": "video", "family": "semantic generative video transmission", "paper_url": "https://arxiv.org/abs/2512.24300", "code_url": "",
     "core_idea_zh": "以面向感知和任务的紧凑语义表示替代像素残差，把带宽成本转移为接收端生成计算，并设计 compression-computation trade-off 以在消费级 GPU 上接近可部署的极低码率传输。",
     "training": {"datasets": "视频生成/压缩适配数据 NR", "crop_or_resolution": "NR", "optimizer": "NR", "learning_rate": "NR", "batch_size": "NR", "schedule": "NR", "hardware": "NR（消费级 GPU 为推理部署讨论）", "pretrained_models": "modern generative video model", "notes": "报告部分样例约 0.02% compression rate；属于语义传输范式。"}, "evaluation": "视频传输样例；压缩率、感知/任务质量和推理成本", "audit": {"status": "partial", "source": "arXiv v1", "checked": "2026-08-24"}
+  },
+  {
+    "id": "li2026progvc",
+    "title": "ProGVC: Progressive-based Generative Video Compression via Auto-Regressive Context Modeling",
+    "year": 2026,
+    "venue": "ECCV 2026",
+    "publication_status": "peer_reviewed",
+    "task": "video",
+    "family": "multi-scale residual tokens + visual autoregressive context",
+    "paper_url": "https://arxiv.org/abs/2603.17546",
+    "code_url": "",
+    "core_idea_zh": "因果视频 VAE 将首帧与后续帧映射到连续时空 latent，多尺度残差量化器再以 BSQ 生成由粗到细的层级二值 token。编码端完整传输所有 intra scales，只传前 k 个 inter scales；同一 Transformer 多尺度自回归模型一方面预测已传 token 的条件概率并驱动算术编码，另一方面在解码端以 argmax 生成被截断的高频 inter scales。这样把渐进码流、离散可变码率、熵建模和细节生成统一在一条自回归路径中。",
+    "training": {
+      "datasets": "Pexels 筛选约 480K 视频（美学分数>4.5、清晰度>0.65、时长>=10秒、宽高比接近 720p）",
+      "crop_or_resolution": "VAE/量化器：256×256×81；AR context：720p random crop/resize、81 帧",
+      "optimizer": "VAE/量化器阶段 NR；AR context 使用 AdamW（β1=0.9，β2=0.97）",
+      "learning_rate": "两个阶段均为 5e-5",
+      "batch_size": "VAE/量化器阶段 2；AR context 阶段 8",
+      "schedule": "联合微调 VAE+多尺度量化器 10K iterations；训练多尺度 AR context 60K iterations",
+      "hardware": "NR（论文未报告训练 GPU 型号和卡数；1×NVIDIA H20 仅用于复杂度测试）",
+      "pretrained_models": "继承 InfinityStar 的 causal video VAE 与多尺度残差量化基础配置",
+      "notes": "VAE/量化器损失为 entropy、commitment、L2、GAN、LPIPS，权重分别 0.1/0.25/1/0.01/4。训练时随机丢弃后部 inter scales；实际码率点通过发送 inter scale 数 k 离散控制。当前未发现官方代码。"
+    },
+    "evaluation": "Xiph、HEVC Class B、MCL-JCV、UVG；前 81 帧，HEVC-B/MCL-JCV 降采样至 720p；DISTS、LPIPS、NIQE、PSNR、kbps、BD-rate/BD-metric 与编解码时延",
+    "audit": {"status": "verified", "source": "用户提供的 arXiv v1 正文与补充材料；ECCV 2026 官方录用列表", "checked": "2026-08-27"}
+  },
+  {
+    "id": "zeng2026gvccturbo",
+    "title": "GVCCTurbo: Rate-Compute Quality Scheduling for Codebook Driven Generative Compression",
+    "year": 2026,
+    "venue": "arXiv preprint",
+    "publication_status": "preprint",
+    "task": "image+video",
+    "family": "zero-shot codebook trajectory rate-compute scheduling",
+    "paper_url": "https://arxiv.org/abs/2608.03517",
+    "code_url": "",
+    "core_idea_zh": "针对 GVCC/DDCM 中每个有限码率码本修正都绑定一次昂贵生成先验计算的问题，缓存最近一次 clean endpoint，在多个低成本修正步之间复用；用协议级标定的 atom 数 M 和允许 skip-gap，将目标 codebook-payload BPP 直接映射为轨迹长度 T 与刷新周期 p。编码器与解码器共享固定调度，无需额外信令或 codec 训练，同时保留密集的目标相关修正槽位。",
+    "training": {
+      "datasets": "无 codec 训练（zero-shot）；协议校准/评测使用 UVG、HEVC Class B、MCL-JCV",
+      "crop_or_resolution": "无离线训练；视频实验包含原生 1080p 与受控 720p、GOP=33",
+      "optimizer": "不适用",
+      "learning_rate": "不适用",
+      "batch_size": "不适用",
+      "schedule": "一次性标定 M_perc 与 tau_gap；运行时由目标 BPP 计算 (T,p,M)，不进行逐样本 probe",
+      "hardware": "不适用（无 codec 训练）；1×NVIDIA RTX PRO 6000 96GB 仅用于推理计时",
+      "pretrained_models": "FLF2V-14B GVCC、Wan-T2V-1.3B、Turbo-DDCM",
+      "notes": "默认 K=16384、M0=64、T0=20、deterministic tail q=3。受控 Wan-GVCC 将先验评估从 20 次降至 9 次，解码时间约降 44%；BPP-aware 点比 pure-skip 少 2.9% codebook payload bits，并在相近 LPIPS 下提升 PSNR。"
+    },
+    "evaluation": "视频：UVG/HEVC-B/MCL-JCV 的 1080p 与 720p；图像：Turbo-DDCM transfer；BPP、LPIPS、DISTS、PSNR、prior-evaluation 次数与 wall-clock",
+    "audit": {"status": "verified", "source": "arXiv v1 正文、HTML 补充材料与实现配置", "checked": "2026-08-27"}
+  },
+  {
+    "id": "yao2026resiglc",
+    "title": "Loss-Resilient Semantic Communication over Packet-Loss Networks at Extreme-Low Bandwidth",
+    "year": 2026,
+    "venue": "IEEE Transactions on Mobile Computing (to appear)",
+    "publication_status": "peer_reviewed",
+    "task": "image",
+    "family": "loss-resilient generative latent coding",
+    "paper_url": "https://arxiv.org/abs/2608.19590",
+    "code_url": "",
+    "core_idea_zh": "ResiGLC 将生成 latent 划分成 4/6 个可独立分包的 slice，并额外传输低于约 0.002 bpp 的文本语义。双功能 masked modeling Transformer 既预测高斯参数完成 slice 熵编码，又在丢包后补全不可解码 latent；随后文本与补全 latent 共同条件化 latent diffusion。三阶段训练依次学习文本条件生成、率失真感知压缩和随机掩码下的率失真感知-抗丢包联合目标，使可靠信道下可渐进解码、丢包信道下质量平滑退化。",
+    "training": {
+      "datasets": "OpenImages training set",
+      "crop_or_resolution": "训练图像 resize 至 256×256并随机水平翻转",
+      "optimizer": "Adam",
+      "learning_rate": "1e-4",
+      "batch_size": "8",
+      "schedule": "三阶段：文本条件 latent diffusion；联合训练 feature compressor/MMT/双条件生成器；加入随机 latent mask 和 MMT concealment 做 R-D-P-resilience 联合优化。训练步数/epoch NR",
+      "hardware": "NR（训练卡未报告；RTX 4090/2080Ti 仅用于推理时延测试）",
+      "pretrained_models": "连续生成 latent tokenizer/de-tokenizer、图像 caption 模块与文本编码器",
+      "notes": "10% text dropout；第三阶段 alpha=0.5。0.05-0.1 bpp 使用 K=4 packets，>0.1 bpp 使用 K=6；默认 10-step diffusion。未发现官方代码。"
+    },
+    "evaluation": "CLIC2020 512×512 与 Kodak 512×768；无记忆/Markov 丢包；bpp、PSNR、FID、KID、DISTS、LPIPS、渐进解码和时延",
+    "audit": {"status": "partial", "source": "IEEE TMC accepted arXiv v1 正文与实验配置；未披露训练时长和训练硬件", "checked": "2026-08-27"}
   }
 ]
