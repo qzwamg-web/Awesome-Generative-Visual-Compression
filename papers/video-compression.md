@@ -42,6 +42,7 @@
 | 2026 | ✅ | [GenVC / Adaptive Score Distillation](https://arxiv.org/abs/2607.22772) | 压缩原生像素扩散 | OpenVid | 4×NVIDIA A100 80GB | 从零训练压缩专用视频扩散，并门控会导致运动停滞的错误 DMD 更新。 |
 | 2026 | ◐ | [ReGenVC](https://arxiv.org/abs/2607.28144) | 姿态条件四步 VideoDiT | talking-head 蒸馏数据 NR | 训练卡 NR；8 卡仅实时解码 | 首帧与姿态构成极小码流，以蒸馏和多卡流水实现 24 fps 解码。 |
 | 2026 | ✅ | [GVCCTurbo](https://arxiv.org/abs/2608.03517) | 零训练生成轨迹调度 | 无（zero-shot） | 不适用；1×RTX PRO 6000 仅测试 | 将昂贵先验刷新与带码率的码本修正解耦，以目标 BPP 决定轨迹长度和刷新周期；在保持修正槽位时把 20 次先验计算降至 9 次。 |
+| 2026 | ✅ | [GVCHR](https://arxiv.org/abs/2608.11618) | 分层参考 + VideoDiT flow matching | Pexels 筛选约 480K 视频 | NR（训练卡未报告；H20 仅运行时测试） | 统一编码侧参考/质量层级与生成侧注意力层级，以 HTCM 聚合短长期高质量上下文，并阻断低质量 latent 在 DiT 去噪中的伪影反向传播。 |
 | 2026 | ✅ | [DiffVC-ONE](https://arxiv.org/abs/2608.20515) | 一步 VideoDiT + 统一 latent codec | OpenVid-HD（36,971 clips） | NR（型号与卡数均未报告） | U2LC 统一压缩 latent slices，混合条件控制一步 VideoDiT 对整 GOP 做时空增强。 |
 
 逐篇训练配置与核验证据见 [`data/papers.json`](../data/papers.json)。
