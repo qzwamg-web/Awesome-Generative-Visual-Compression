@@ -2,7 +2,7 @@
 
 面向**生成式图像编码（GIC）**、**生成式视频编码（GVC）**与**生成式图像修复（GIR）**的中文论文索引。项目不仅记录论文、代码和发表信息，还逐篇整理训练数据、裁剪尺寸、优化器、学习率、batch size、训练步数、训练硬件，以及可直接用于研究复现的中文方法摘要。
 
-> 时间范围：2016-08-27 至 2026-08-27（滚动十年窗口）。最后检索：2026-08-27。
+> 时间范围：2016-08-27 至 2026-08-31（滚动十年窗口）。最后检索：2026-08-31。
 
 ## 收录原则
 
@@ -45,7 +45,7 @@
 
 ## 当前覆盖
 
-当前压缩索引共收录 58 篇工作，另收录 25 篇生成式图像修复工作，覆盖 2016–2026。近期编码主线包括 ProGVC、GVCCTurbo、ResiGLC、AEIC、DiffVC-ONE、GenVC/ASD、FlowCodec、CoD-Lite、CADC、DiT-IC、ZeroGVC 与 ReGenVC；修复部分重点覆盖扩散逆问题、生成式超分、统一盲修复与 flow-matching 路线。
+当前压缩索引共收录 59 篇工作，另收录 25 篇生成式图像修复工作，覆盖 2016–2026。近期编码主线包括 ProGVC、GVCCTurbo、GVCHR、ResiGLC、AEIC、DiffVC-ONE、GenVC/ASD、FlowCodec、CoD-Lite、CADC、DiT-IC、ZeroGVC 与 ReGenVC；修复部分重点覆盖扩散逆问题、生成式超分、统一盲修复与 flow-matching 路线。
 
 ## Citation
 
