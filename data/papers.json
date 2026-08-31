@@ -808,5 +808,34 @@
     },
     "evaluation": "CLIC2020 512×512 与 Kodak 512×768；无记忆/Markov 丢包；bpp、PSNR、FID、KID、DISTS、LPIPS、渐进解码和时延",
     "audit": {"status": "partial", "source": "IEEE TMC accepted arXiv v1 正文与实验配置；未披露训练时长和训练硬件", "checked": "2026-08-27"}
+  },
+  {
+    "id": "li2026gvchr",
+    "title": "Generative Video Compression Based on Hierarchical Referencing",
+    "year": 2026,
+    "venue": "arXiv preprint",
+    "publication_status": "preprint",
+    "task": "video",
+    "family": "hierarchical latent coding + VideoDiT flow matching",
+    "paper_url": "https://arxiv.org/abs/2608.11618",
+    "code_url": "",
+    "core_idea_zh": "GVCHR 将 3D VAE latent 按参考重要性划分为三层，并在编码与生成两端共享同一层级：低层高质量锚点获得更高 RD 权重和更多码率，HTCM 以最近同层/低层特征提供短期细节、以历次最低层锚点的门控 slot memory 提供长期语义；HA-Adapter 再用分块 attention mask 约束每帧只读取同层或更可靠参考，避免低质量 latent 在 VideoDiT 去噪中反向污染高质量帧，从编码条件和生成注意力两条路径共同抑制误差与伪影传播。",
+    "training": {
+      "datasets": "Pexels 筛选约 480K 视频（VBench 美学分数>4.5、CLIP-IQA 清晰度>0.65、宽高比接近 16:9）",
+      "crop_or_resolution": "阶段 1–5：短边缩放至 256 后随机裁剪 256×256，依次使用 5/17/33 帧；阶段 6：448×448、33 帧",
+      "optimizer": "AdamW",
+      "learning_rate": "阶段 1–4：1e-4；阶段 5：5e-5；阶段 6：2e-5",
+      "batch_size": "阶段 1–5：8；阶段 6：4",
+      "schedule": "六阶段共 200K iterations：30K/20K/20K 逐步训练 5/17/33 帧 latent codec；30K 联合训练 codec+HA-Adapter；40K 五码率像素/感知优化；60K 高分辨率微调",
+      "hardware": "NR（论文未报告训练 GPU 型号和卡数；NVIDIA H20 仅用于编解码时延测试）",
+      "pretrained_models": "VACE 的 3D VAE、HA-Adapter 与 Video DiT 初始化；Video DiT 冻结，HA-Adapter 可训练；latent codec 基于 DCVC-RT 架构从头训练",
+      "notes": "默认 GOP=32 个 inter frame（每次处理 33 帧），latent GOP=8、mini-GOP=4；三层周期为 L=[2,1,2,0]、RD 权重=[0.5,0.9,0.5,1.2]。输入保留彩色关键帧并将中间帧转为灰度，由生成模型恢复色彩。损失依阶段包含 latent MSE、conditional flow matching、pixel MSE 与 LPIPS。未发现官方代码。"
+    },
+    "evaluation": "HEVC Class B、UVG、MCL-JCV；每序列前 96 帧，GOP=32；BPP、PSNR、MS-SSIM、LPIPS、DISTS、FID、FloLPIPS、BD-rate/BD-metric 与时延。论文报告相对 GNVC-VD 的平均 LPIPS/DISTS BD-rate 改善 50.5%/54.0%；H20 上 GOP32 编码/解码为 396/2814 ms 每帧。",
+    "audit": {
+      "status": "verified",
+      "source": "arXiv:2608.11618 v1 正文与 HTML 实验配置",
+      "checked": "2026-08-31"
+    }
   }
 ]
